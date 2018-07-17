@@ -40,12 +40,9 @@ fi
 
 
 #Loop through options passed
-while getopts :n:p:c:m:e:kh optname; do
+while getopts :p:c:m:e:kh optname; do
   log "Option $optname set with value ${OPTARG}"
   case $optname in
-    n) #set cluster name
-      CLUSTER_NAME=${OPTARG}
-      ;;
     p) #set cluster name
       FIRSTPRIVATEIP=${OPTARG}
       ;;
@@ -131,7 +128,7 @@ configure_es()
 {
     log "Update configuration"
     mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.bak
-    echo "cluster.name: $CLUSTER_NAME" >> /etc/elasticsearch/elasticsearch.yml
+    echo "cluster.name: elasticsearch" >> /etc/elasticsearch/elasticsearch.yml
     echo "node.name: ${HOSTNAME}" >> /etc/elasticsearch/elasticsearch.yml
     declare -i minimum_master_nodes=$((($NODECOUNT / 2) + 1))
     echo "discovery.zen.minimum_master_nodes: 2" >> /etc/elasticsearch/elasticsearch.yml
