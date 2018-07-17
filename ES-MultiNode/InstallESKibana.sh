@@ -40,7 +40,7 @@ fi
 
 
 #Loop through options passed
-while getopts :p:c:m:e:kh optname; do
+while getopts :p:c:m:e:k:h optname; do
   log "Option $optname set with value ${OPTARG}"
   case $optname in
     p) #set cluster name
