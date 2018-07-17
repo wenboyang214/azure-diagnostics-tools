@@ -135,7 +135,8 @@ configure_es()
     discovery_endpoints=$(get_discovery_endpoints $FIRSTPRIVATEIP $NODECOUNT)
     echo $discovery_endpoints
     echo "discovery.zen.ping.unicast.hosts: $discovery_endpoints" >> /etc/elasticsearch/elasticsearch.yml
-    echo "network.host: ${HOSTNAME}" >> /etc/elasticsearch/elasticsearch.yml
+    IPADDRESS=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+    echo "network.host: ${IPADDRESS}" >> /etc/elasticsearch/elasticsearch.yml
     echo "http.port: 9200" >> /etc/elasticsearch/elasticsearch.yml
     echo "bootstrap.memory_lock: true" >> /etc/elasticsearch/elasticsearch.yml
 
@@ -157,8 +158,9 @@ configure_es()
 # Configure kibana
 configure_kibana()
 {
-    echo "server.host: \"${HOSTNAME}\"" >> /etc/kibana/kibana.yml
-    echo "elasticsearch.url: \"http://${HOSTNAME}:9200\"" >> /etc/kibana/kibana.yml
+    IPADDRESS=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+    echo "server.host: \"${IPADDRESS}\"" >> /etc/kibana/kibana.yml
+    echo "elasticsearch.url: \"http://${IPADDRESS}:9200\"" >> /etc/kibana/kibana.yml
     service elasticsearch start
     #sudo systemctl stop kibana.service
     sleep 10
