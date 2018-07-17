@@ -135,9 +135,10 @@ configure_es()
     discovery_endpoints=$(get_discovery_endpoints $FIRSTPRIVATEIP $NODECOUNT)
     echo $discovery_endpoints
     echo "discovery.zen.ping.unicast.hosts: $discovery_endpoints" >> /etc/elasticsearch/elasticsearch.yml
-    echo "network.host: 9200" >> /etc/elasticsearch/elasticsearch.yml
+    echo "network.host: ${HOSTNAME}" >> /etc/elasticsearch/elasticsearch.yml
+    echo "http.port: 9200" >> /etc/elasticsearch/elasticsearch.yml
     echo "bootstrap.memory_lock: true" >> /etc/elasticsearch/elasticsearch.yml
-    
+
     echo "node.master: true" >> /etc/elasticsearch/elasticsearch.yml
     echo "node.data: true" >> /etc/elasticsearch/elasticsearch.yml
 
@@ -146,13 +147,12 @@ configure_es()
     sudo systemctl start elasticsearch.service
     #sudo systemctl stop elasticsearch.service
     sleep 30
-    
+
     if [ `systemctl is-failed elasticsearch.service` == 'failed' ];
     then
         log "Elasticsearch unit failed to start"
         exit 1
     fi
-
 }
 
 # Configure kibana
