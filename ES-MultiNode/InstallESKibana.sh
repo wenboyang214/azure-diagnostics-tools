@@ -132,9 +132,10 @@ configure_es()
     echo "node.name: ${HOSTNAME}" >> /etc/elasticsearch/elasticsearch.yml
     declare -i minimum_master_nodes=$((($NODECOUNT / 2) + 1))
     echo "discovery.zen.minimum_master_nodes: 2" >> /etc/elasticsearch/elasticsearch.yml
-    discovery_endpoints=$(get_discovery_endpoints $FIRSTPRIVATEIP $$NODECOUNT)
+    discovery_endpoints=$(get_discovery_endpoints $FIRSTPRIVATEIP $NODECOUNT)
+    echo $discovery_endpoints
     echo "discovery.zen.ping.unicast.hosts: $discovery_endpoints" >> /etc/elasticsearch/elasticsearch.yml
-    echo "network.host: _site_" >> /etc/elasticsearch/elasticsearch.yml
+    echo "network.host: 9200" >> /etc/elasticsearch/elasticsearch.yml
     echo "bootstrap.memory_lock: true" >> /etc/elasticsearch/elasticsearch.yml
     
     echo "node.master: true" >> /etc/elasticsearch/elasticsearch.yml
@@ -189,18 +190,13 @@ configure_system()
     sudo systemctl daemon-reload
 }
 
-check_start_service()
-{
-    log "Master Node install elasticsearch and kibana"
-    log "Install configure and start elasticsearch"
-    install_es()
-    configure_es()
-    log "Install configure and start kibana"
-    install_kibana()
-    configure_kibana()
-}
-
 log " ---------------begin------------------- "
-install_java()
-check_start_service()
-
+install_java
+log "Master Node install elasticsearch and kibana"
+log "Install configure and start elasticsearch"
+install_es
+configure_system
+configure_es
+log "Install configure and start kibana"
+install_kibana
+configure_kibana
