@@ -187,25 +187,6 @@ configure_system()
     echo '[Service]' >> /etc/systemd/system/elasticsearch.service.d/override.conf
     echo 'LimitMEMLOCK=infinity' >> /etc/systemd/system/elasticsearch.service.d/override.conf
     sudo systemctl daemon-reload
-
-    # data disk
-    DATA_DIR="/datadisks/disk1"
-    if ! [ -f "vm-disk-utils-0.1.sh" ]; 
-    then
-        DOWNLOAD_SCRIPT="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/shared_scripts/ubuntu/vm-disk-utils-0.1.sh"
-        log "Disk setup script not found in `pwd`, download from $DOWNLOAD_SCRIPT"
-        wget -q $DOWNLOAD_SCRIPT
-    fi
-    
-    bash ./vm-disk-utils-0.1.sh
-    if [ $? -eq 0 ] && [ -d "$DATA_DIR" ];
-    then
-        log "Disk setup successful, using $DATA_DIR"
-        chown -R elasticsearch:elasticsearch $DATA_DIR
-        echo "path.data: $DATA_DIR" >> /etc/elasticsearch/elasticsearch.yml
-    else
-        log "Disk setup failed, using default data storage location"
-    fi
 }
 
 check_start_service()
