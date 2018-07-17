@@ -141,10 +141,9 @@ configure_es()
 
     echo "node.master: true" >> /etc/elasticsearch/elasticsearch.yml
     echo "node.data: true" >> /etc/elasticsearch/elasticsearch.yml
-
-    sudo /bin/systemctl daemon-reload
-    sudo /bin/systemctl enable elasticsearch.service
-    sudo systemctl start elasticsearch.service
+    echo "path.data: /var/lib/elasticsearch" >> /etc/elasticsearch/elasticsearch.yml
+    echo "path.logs: /var/log/elasticsearch" >> /etc/elasticsearch/elasticsearch.yml
+    service elasticsearch start
     #sudo systemctl stop elasticsearch.service
     sleep 30
 
@@ -160,8 +159,7 @@ configure_kibana()
 {
     echo "server.host: \"${HOSTNAME}\"" >> /etc/kibana/kibana.yml
     echo "elasticsearch.url: \"http://${HOSTNAME}:9200\"" >> /etc/kibana/kibana.yml
-    sudo /bin/systemctl enable kibana.service
-    sudo systemctl start kibana.service
+    service elasticsearch start
     #sudo systemctl stop kibana.service
     sleep 10
     
@@ -187,7 +185,6 @@ configure_system()
     touch /etc/systemd/system/elasticsearch.service.d/override.conf
     echo '[Service]' >> /etc/systemd/system/elasticsearch.service.d/override.conf
     echo 'LimitMEMLOCK=infinity' >> /etc/systemd/system/elasticsearch.service.d/override.conf
-    sudo systemctl daemon-reload
 }
 
 log " ---------------begin------------------- "
