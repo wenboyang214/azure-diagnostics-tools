@@ -144,6 +144,7 @@ configure_es()
     echo "node.data: true" >> /etc/elasticsearch/elasticsearch.yml
     echo "path.data: /var/lib/elasticsearch" >> /etc/elasticsearch/elasticsearch.yml
     echo "path.logs: /var/log/elasticsearch" >> /etc/elasticsearch/elasticsearch.yml
+    sudo update-rc.d elasticsearch defaults 95 10
     service elasticsearch start
     #sudo systemctl stop elasticsearch.service
     sleep 30
@@ -161,6 +162,7 @@ configure_kibana()
     IPADDRESS=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
     echo "server.host: \"${IPADDRESS}\"" >> /etc/kibana/kibana.yml
     echo "elasticsearch.url: \"http://${IPADDRESS}:9200\"" >> /etc/kibana/kibana.yml
+    sudo update-rc.d kibana defaults 95 10
     service elasticsearch start
     #sudo systemctl stop kibana.service
     sleep 10
