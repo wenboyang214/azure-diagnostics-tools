@@ -15,7 +15,7 @@
 log()
 {
     echo "$1"
-    logger "$1
+    logger "$1"
 }
 
 if [ "${UID}" -ne 0 ];
@@ -26,7 +26,7 @@ then
 fi
 
 #Loop through options passed
-while getopts :n:g:h optname; do
+while getopts :l:g:h optname; do
   log "Option $optname set with value ${OPTARG}"
   case $optname in
     l) #set logstash downloading URI
