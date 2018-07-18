@@ -70,7 +70,7 @@ install_logstash_with_plugin()
     sudo wget -q "$LOGSTASH_DOWNLOAD_URL" -O logstash.deb
     sudo dpkg -i logstash.deb
     log "Installing logstash-input-azureblob"
-    cd /usr/share/logstash
+    cd /usr/share/logstash || return
     ./bin/logstash-plugin install logstash-input-azureblob
     log "Installing logstash-output-azure_loganalytics"
     ./bin/logstash-plugin install logstash-output-azure_loganalytics
