@@ -163,7 +163,7 @@ configure_kibana()
     echo "server.host: \"${IPADDRESS}\"" >> /etc/kibana/kibana.yml
     echo "elasticsearch.url: \"http://${IPADDRESS}:9200\"" >> /etc/kibana/kibana.yml
     sudo update-rc.d kibana defaults 95 10
-    service elasticsearch start
+    service kibana start
     #sudo systemctl stop kibana.service
     sleep 10
     
